@@ -1,0 +1,15 @@
+Type: "AWS::Cognito::UserPool"
+Properties:
+  MfaConfiguration: OFF
+  UserPoolName: ${self:provider.environment.userpool}
+  UsernameAttributes:
+    - email
+  AutoVerifiedAttributes:
+    - email
+  Policies:
+    PasswordPolicy:
+      MinimumLength: 6
+      RequireLowercase: False
+      RequireNumbers: True
+      RequireSymbols: False
+      RequireUppercase: True

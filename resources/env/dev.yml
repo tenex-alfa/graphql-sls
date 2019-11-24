@@ -1,0 +1,6 @@
+db: ${self:service}-${self:provider.stage}-dynamodb
+userpool: ${self:service}-${self:provider.stage}-userpool
+userpoolclient: ${self:service}-${self:provider.stage}-userpoolclient
+userpoolid: !Ref CognitoUserPool
+clientid: !Ref CognitoUserPoolClient
+stage: dev

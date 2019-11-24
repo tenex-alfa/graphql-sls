@@ -1,0 +1,6 @@
+handler: dist/routes/hello/hello.default
+events:
+  - http:
+      path: test/hello/my/db
+      method: get
+      cors: true

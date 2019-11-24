@@ -1,0 +1,36 @@
+{
+  "name": "@tenex/ts-sls",
+  "version": "0.0.0",
+  "description": "",
+  "main": "dist",
+  "scripts": {
+    "test": "mocha -r ts-node/register tests/**/*",
+    "build": "tsc",
+    "start": "tsc --watch > ts.log & sls offline"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@lifeomic/dynamodb-dataloader": "^1.0.2",
+    "@tenex/dynamoose-object": "^1.0.12",
+    "amazon-cognito-identity-js": "^3.2.0",
+    "apollo-server-lambda": "^2.9.9",
+    "aws-sdk": "^2.574.0",
+    "reflect-metadata": "^0.1.13",
+    "serverless-export-env": "^1.2.0",
+    "type-graphql": "^0.18.0-beta.3"
+  },
+  "devDependencies": {
+    "@types/node": "^12.12.7",
+    "chai": "^4.2.0",
+    "chalk": "^2.4.2",
+    "mocha": "^6.2.0",
+    "serverless-dotenv-plugin": "^2.1.1",
+    "serverless-offline-lambda": "^1.0.4",
+    "serverless-webpack": "^5.3.1",
+    "ts-node": "^8.4.1",
+    "typescript": "^3.7.2",
+    "webpack": "^4.40.2",
+    "webpack-node-externals": "^1.7.2"
+  }
+}
