@@ -1,5 +1,5 @@
+import { DBObject } from "./parse-item-to";
 import { cacheUtils } from "./cache";
-import { toDynamoObject } from "@tenex/dynamoose-object";
 import * as AWS from "aws-sdk";
 import { createDataLoader } from "@lifeomic/dynamodb-dataloader";
 
@@ -48,8 +48,6 @@ class DB {
     // to more JS friendly object.
     const parsed = parse(data);
 
-    console.log(parsed);
-
     // Set a new cache entry and return the object.
     return cacheUtils.setObject(parsed);
   }
@@ -62,7 +60,7 @@ class DB {
 
     // Creates a DynamoDB object which has a
     // save attribute which uploads a object.
-    const dobj = toDynamoObject(this.tableName, object);
+    const dobj = new DBObject(object, this.tableName);
 
     // Here we save the created object
     await dobj.save();
@@ -72,6 +70,25 @@ class DB {
       status: 200
     };
   }
+
+  // async update(id: string, body: object, update: any) {
+  //   // Sets the object into the cache. As we know that we
+  //   // are going to upload we can cache the object before
+  //   // uploading the item.
+  //   const object: any = cacheUtils.setObject({ _id: id, ...body });
+
+  //   // Creates a DynamoDB object which has a
+  //   // save attribute which uploads a object.
+  //   const dobj = toDynamoObject(this.tableName, object);
+
+  //   // Here we save the created object
+  //   await dobj.update(id, update);
+
+  //   // a status of 200
+  //   return {
+  //     status: 200
+  //   };
+  // }
 }
 
 /**
@@ -96,6 +113,11 @@ function parse(object: any) {
     // the string.
     if (key == "N") out = parseInt(object[key]);
 
+    // If key is N meaning in DynamoDB that
+    // it is number set key to the value of
+    // the string.
+    if (key == "M") out = parse(object[key]);
+
     // Does the same for the childer of the object.
     if (object[key]?.S) out[key] = object[key].S;
     if (object[key]?.N) out[key] = parseInt(object[key].N);
@@ -103,8 +125,9 @@ function parse(object: any) {
     // If the value is of type L or M meaning list or map.
     // call funciton recursivly to get value
     if (object[key]?.L) out[key] = object[key].L.map(parse);
-    if (object[key]?.M) out[key] = object[key].M.map(parse);
+    if (object[key]?.M) out[key] = Object.entries(object[key].M).map(parse);
   }
+
   return out;
 }
 export const DBHandler = new DB(tableName);
